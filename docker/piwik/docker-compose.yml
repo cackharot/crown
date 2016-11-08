@@ -1,0 +1,18 @@
+---
+hyakutake:
+    build: ./piwik-app
+    ports:
+        - "8080:8080"
+    volumes:
+        - "./config:/etc/nginx/sites-enabled"
+        #- "./test:/usr/share/nginx/www"
+    links:
+        - erela
+
+erela:
+    build: ./mysql-db
+    environment:
+        MYSQL_ROOT_PASSWORD: "mytest"
+    ports:
+        - "3306:3306"
+
