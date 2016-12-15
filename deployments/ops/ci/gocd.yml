@@ -1,0 +1,16 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: gocd-server-deployment
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: gocd-server
+    spec:
+      containers:
+      - name: frigate-gocd-server
+        image: localhost:5000/frigate:latest
+        ports:
+        - containerPort: 8153
