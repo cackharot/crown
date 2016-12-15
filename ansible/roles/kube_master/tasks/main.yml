@@ -1,0 +1,19 @@
+---
+- name: Download go lang
+  shell: cd /tmp && ([ -f go1.7.4.linux-amd64.tar.gz ] || [ -f /usr/local/go/bin/go ] || wget https://storage.googleapis.com/golang/go1.7.4.linux-amd64.tar.gz)
+
+- name: extract go lang
+  become: yes
+  shell: cd /tmp && tar -xf go1.7.4.linux-amd64.tar.gz -C /usr/local
+
+- name: add go lang binaries to PATH
+  shell: export PATH=$PATH:/usr/local/go/bin
+
+- name: Clone kubernetes repo
+  shell: cd ~ && ([ -d kubernetes ] || git clone https://github.com/GoogleCloudPlatform/kubernetes.git)
+
+- name: Install kube cluster
+  shell: cd ~/kubernetes/cluster/ubuntu && ([ -d binaries ] || ./download-release.sh)
+
+- name: add kube binaries to PATH
+  shell: export PATH=$PATH:~/kubernetes/cluster/ubuntu/binaries
