@@ -21,7 +21,7 @@ Vagrant.configure("2") do |config|
 
     chaos.vm.provider "virtualbox" do |vb|
       vb.gui = false
-      vb.memory = "1048"
+      vb.memory = "4096"
     end
   end
 
