@@ -1,0 +1,21 @@
+session_name: ops-insight
+windows:
+  - window_name: crown-prj
+    focus: 'true'
+    layout: main-vertical
+    panes:
+        - vim
+        - focus: 'true'
+    shell_command: Python
+    start_directory: ~/Projects/crown
+  - window_name: vg-docker
+    layout: tiled
+    panes:
+        - shell_command:
+            - vagrant up
+            - vagrant ssh
+        - shell_command:
+            - tail -f /var/log/fbeazt/fbeazt.log
+    shell_command: zsh
+    start_directory: ~/Projects/crown
+

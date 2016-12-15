@@ -12,7 +12,7 @@ logstash:
   volumes:
     - ./logstash/config:/etc/logstash/conf.d
   ports:
-    - "5000:5000"
+    - "5031:5000"
   links:
     - elasticsearch
 kibana:
