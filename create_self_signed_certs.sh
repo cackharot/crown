@@ -1,7 +1,8 @@
 #!/bin/bash
 
 EXPIRE_DAYS=`eval 'echo 365*5 | bc'`
-DOMAIN_NAME='registry.walkure.net'
+DOMAIN_NAME=${REGISTRY_DOMAIN_NAME:-"registry.walkure.net"}
+DOMAIN_PORT=${REGISTRY_DOMAIN_PORT:-5000}
 #ALT_DOMAIN_NAMES='DNS.1=walkure.net,DNS.2=registry.walkure.net,DNS.3=gocd.walkure.net'
 COUNTRY_CODE='US'
 STATE='Delaware'
