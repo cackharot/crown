@@ -1,0 +1,20 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: gocd-agent
+  namespace: chaos-gocd
+spec:
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        app: gocd-agent
+    spec:
+      containers:
+      - name: draco-gocd-agent
+        image: registry.walkure.net:5000/draco:latest
+        env:
+        - name: GO_SERVER_URL
+          value: http://gocd-server.chaos-gocd.svc.walkure.net:8153/go
+        - name: GO_SERVER
+          value: gocd-server.chaos-gocd.svc.walkure.net

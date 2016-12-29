@@ -1,0 +1,50 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: kube-dns
+  namespace: kube-system
+  labels:
+      k8s-app: kube-dns
+      kubernetes.io/cluster-service: "true"
+spec:
+  replicas: 1
+  strategy:
+    rollingUpdate:
+        maxSurge: 10%
+        maxUnavailable: 0
+  selector:
+        matchLabels:
+           k8s-app: kube-dns
+  template:
+    metadata:
+        labels:
+            k8s-app: kube-dns
+            kubernetes.io/cluster-service: "true"
+    spec:
+        dnsPolicy: "Default"  # Don't use cluster DNS.
+        containers:
+          - name: etcd
+            image: quay.io/coreos/etcd:latest
+            command: [
+                    "/etcd",
+                    "-bind-addr=127.0.0.1",
+                    "-peer-bind-addr=127.0.0.1",
+            ]
+          - name: kube2sky
+            image: kubernetes/kube2sky:1.0
+            command: [
+                    # entrypoint = "/kube2sky",
+                    "-domain=walkure.net",
+            ]
+          - name: skydns
+            image: kubernetes/skydns:2014-12-23-001
+            command: [
+                    # entrypoint = "/skydns",
+                    "-machines=http://localhost:4001",
+                    "-addr=0.0.0.0:53",
+                    "-domain=walkure.net",
+            ]
+            ports:
+              - name: dns
+                containerPort: 53
+                protocol: UDP

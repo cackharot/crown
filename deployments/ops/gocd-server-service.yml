@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: gocd-server
+  namespace: chaos-gocd
+  labels:
+    app: gocd-server
+spec:
+  selector:
+    app: gocd-server
+  type: LoadBalancer
+  ports:
+  - name: gocd-server
+    port: 8153
+    protocol: TCP
+  - name: gocd-server-cmd-port
+    port: 8154
+    protocol: TCP

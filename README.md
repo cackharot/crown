@@ -7,14 +7,14 @@
 * Virtualbox
 * Ansible
 
-# Setup the cluster
+## Setup the cluster
 
 * vagrant up --provision
 * sh setup_chaos.sh
 * sudo docker run -d -p 5000:5000 --restart=always --name registry registry:latest
 
 
-# Running GoCD
+## Running GoCD
 
 * cd docker/go-server
 * sudo docker build -t frigate .
