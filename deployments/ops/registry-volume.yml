@@ -7,9 +7,10 @@ metadata:
     kubernetes.io/name: "kube-registry-volume"
 spec:
   capacity:
-    storage: {{ pillar['cluster_registry_disk_size'] }}
+    #storage: {{ pillar['cluster_registry_disk_size'] }}
+    storage: 15Gi
   accessModes:
     - ReadWriteOnce
   nfs:
-    pdName: "{{ pillar['cluster_registry_disk_name'] }}"
-    fsType: "ext4"
+    path: /registry
+    server: 172.16.0.253

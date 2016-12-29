@@ -11,4 +11,5 @@ spec:
     - ReadWriteOnce
   resources:
     requests:
-      storage: {{ pillar['cluster_registry_disk_size'] }}
+      #storage: {{ pillar['cluster_registry_disk_size'] }}
+      storage: 12Gi

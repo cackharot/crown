@@ -17,3 +17,22 @@
 
 - name: add kube binaries to PATH
   shell: export PATH=$PATH:~/kubernetes/cluster/ubuntu/binaries
+
+- name: Install NFS Server
+  apt: pkg=nfs-kernel-server state=present update_cache=no
+
+- name: Create NFS directorys
+  become: yes
+  shell: mkdir -p /export/registry
+
+- name: Copy exports config
+  become: yes
+  shell: 'echo /export       172.16.0.0/24(rw,fsid=0,insecure,no_subtree_check,async,no_root_squash)
+  /export/registry 172.16.0.0/24(rw,nohide,insecure,no_subtree_check,async,no_root_squash)" >> /etc/exports'
+
+- name: Restarr nfs-server
+  service: name=nfs-kernel-server state=restarted
+
+- name: Reload nfs exports
+  become: yes
+  shell: 'exportfs -ra'
