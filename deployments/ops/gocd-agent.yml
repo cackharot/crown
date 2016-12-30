@@ -4,7 +4,7 @@ metadata:
   name: gocd-agent
   namespace: chaos-gocd
 spec:
-  replicas: 3
+  replicas: 1
   template:
     metadata:
       labels:
@@ -13,8 +13,24 @@ spec:
       containers:
       - name: draco-gocd-agent
         image: registry.walkure.net:5000/draco:latest
+        command: ['/bin/sh', '-c']
+        args: ['service docker start && sh /var/go/add-extra-hosts.sh && /sbin/my_init']
+        securityContext:
+          privileged: true
         env:
         - name: GO_SERVER_URL
           value: http://gocd-server.chaos-gocd.svc.walkure.net:8153/go
         - name: GO_SERVER
           value: gocd-server.chaos-gocd.svc.walkure.net
+        volumeMounts:
+        - mountPath: /etc/docker/certs.d/
+          name: registry-certs
+      volumes:
+      - name: registry-certs
+        secret:
+          secretName: registry-tls-secret
+          items:
+            - key: ca.crt
+              path: "registry.walkure.net:5000/ca.crt"
+
+

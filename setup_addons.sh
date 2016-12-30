@@ -28,15 +28,24 @@ create_namespace() {
     fi
 }
 
+install_gocd_ns_certs () {
+    echo 'Creating kube secret for docker registry certifications'
+    ${KUBECTL} --namespace=chaos-gocd delete secret registry-tls-secret
+    ${KUBECTL} --namespace=chaos-gocd create secret generic registry-tls-secret \
+        --from-file=ca.crt=certs/registry.walkure.net.crt
+}
+
 install_certs () {
     echo 'Creating kube secret for docker registry certifications'
     ${KUBECTL} --namespace=kube-system delete secret registry-tls-secret
     ${KUBECTL} --namespace=kube-system create secret generic registry-tls-secret \
+        --from-file=ca.crt=certs/registry.walkure.net.crt \
         --from-file=domain.crt=certs/registry.walkure.net.crt \
         --from-file=domain.key=certs/registry.walkure.net.key
 }
 
 create_namespace 'chaos-gocd'
+install_gocd_ns_certs
 
 if [ $ENABLE_DOCKER_REGISTRY = true ]; then
     KUBEREGISTRY=`eval "${KUBECTL} get services --namespace=kube-system | grep kube-registry | cat"`
