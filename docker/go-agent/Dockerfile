@@ -38,6 +38,8 @@ COPY ./add-extra-hosts.sh /var/go/add-extra-hosts.sh
 
 RUN chmod +x /var/go/add-extra-hosts.sh
 
-RUN pip3 install Jinja2 PyYaml
+RUN pip3 install Jinja2 PyYaml pykube
+
+RUN pip3 install -U six
 
 RUN chown -R go:go /var/go/.kube
