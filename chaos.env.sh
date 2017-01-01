@@ -7,3 +7,4 @@ export SERVICE_CLUSTER_IP_RANGE=11.1.1.0/24
 export FLANNEL_NET=192.168.0.0/16
 export DNS_DOMAIN="walkure.net"
 export DNS_SERVER_IP=11.1.1.254
+export ALLOW_PRIVILEGED="true"

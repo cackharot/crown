@@ -36,7 +36,7 @@ Vagrant.configure('2') do |config|
 
       drone.vm.provider 'virtualbox' do |vb|
         vb.gui = false
-        vb.memory = '2048'
+        vb.memory = '2560'
       end
     end
   end
