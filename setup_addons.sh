@@ -7,6 +7,8 @@ ENABLE_DOCKER_REGISTRY=${ENABLE_DOCKER_REGISTRY:-true}
 ENABLE_DNS_SERVER=${ENABLE_DNS_SERVER:-true}
 ENABLE_GOCD=${ENABLE_GOCD:-true}
 ENABLE_ELK=${ENABLE_ELK:-true}
+ENABLE_DASHBOARD=${ENABLE_DASHBOARD:-true}
+ENABLE_REGISTRY_UI=${ENABLE_REGISTRY_UI:-true}
 KUBE_ROOT="deployments/ops"
 
 echo 'Setup cluster addons'
@@ -81,9 +83,18 @@ if [ $ENABLE_GOCD = true ]; then
     fi
 fi
 
+if [ $ENABLE_REGISTRY_UI = true ]; then
+    echo 'Creating docker registry ui'
+    install 'registry-ui'
+fi
+
+if [ $ENABLE_DASHBOARD = true ]; then
+    echo 'Creating kubernetes ui dashboard'
+    install 'dashboard'
+fi
+
 if [ $ENABLE_ELK = true ]; then
     echo 'Creating ELK stack'
     #install 'logstash'
     #install 'kibana'
 fi
-

@@ -1,0 +1,58 @@
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: kube-registry-ui
+  namespace: kube-system
+  labels:
+    k8s-app: kube-registry-ui
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        k8s-app: kube-registry-ui
+    spec:
+      containers:
+      - name: docker-registry-ui
+        image: 'konradkleine/docker-registry-frontend:v2'
+        command: ['/bin/sh', '-c']
+        args: ['echo 11.1.1.105 registry.walkure.net >> /etc/hosts && /root/start-apache.sh']
+        env:
+        - name: JAVA_OPTS
+          value: "-Djavax.net.debug=ssl:handshake -Djavax.net.ssl.trustStore=/opt/truststore -Djavax.net.ssl.trustStorePassword=password"
+        - name: ENV_DOCKER_REGISTRY_HOST
+          value: 'registry.walkure.net'
+        - name: ENV_DOCKER_REGISTRY_PORT
+          value: '5000'
+        - name: ENV_DOCKER_REGISTRY_USE_SSL
+          value: '1'
+        ports:
+        - containerPort: 80
+          name: registry-ui
+          protocol: TCP
+        volumeMounts:
+        - name: trust-store
+          mountPath: /opt/
+      volumes:
+      - name: trust-store
+        persistentVolumeClaim:
+          claimName: kube-registry-pvc
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: kube-registry-ui
+  namespace: kube-system
+  labels:
+    k8s-app: kube-registry-ui
+spec:
+  selector:
+    k8s-app: kube-registry-ui
+  clusterIP: 11.1.1.115
+  type: LoadBalancer
+  ports:
+  - name: registry-ui
+    port: 80
+    targetPort: 80
+    protocol: TCP

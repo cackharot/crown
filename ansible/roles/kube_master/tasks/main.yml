@@ -23,7 +23,7 @@
 
 - name: Create NFS directorys
   become: yes
-  shell: mkdir -p /export/registry
+  shell: mkdir -p /export/registry && mkdir -p /export/db_storage
 
 - name: Copy exports config
   become: yes
