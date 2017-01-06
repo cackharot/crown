@@ -3,13 +3,8 @@
 set +e
 set +x
 
-CHAOS_IP=${CHAOS_IP:-172.16.0.253}
-DRONE_IPS=${DRONE_IPS:-"172.16.0.11,172.16.0.12"}
-K_LOC=${KUBERNETES_LOC:-"~/kubernetes/cluster"}
-PKEY=${PKEY:-".vagrant/machines/chaos/virtualbox/private_key"}
-REGISTRY_DOMAIN_NAME="registry.walkure.net"
-REGISTRY_DOMAIN_PORT='5000'
-REGISTRY_DOMAIN_CERT="certs/${REGISTRY_DOMAIN_NAME}.crt"
+. ./chaos.env.sh
+. ./utils.sh
 
 if [ -f "${REGISTRY_DOMAIN_CERT}" ]; then
     echo "Using docker registry ${REGISTRY_DOMAIN_NAME}:${REGISTRY_DOMAIN_PORT}"
@@ -19,38 +14,9 @@ else
     echo "Using docker registry ${REGISTRY_DOMAIN_NAME}:${REGISTRY_DOMAIN_PORT}"
 fi
 
-remote_copy() {
-    key=$1
-    user='vagrant'
-    host=$2
-    src_file=$3
-    dest_file=$4
-    scp -q -i ${key} ${user}@${host}:${src_file} ${dest_file}
-}
-
-local_copy() {
-    key=$1
-    user='vagrant'
-    host=$2
-    src_file=$3
-    dest_file=$4
-    scp -q -i ${key} ${src_file} ${user}@${host}:${dest_file}
-}
-
-remote_exec() {
-    key=$1
-    user='vagrant'
-    host=$2
-    cmd=$3
-    ssh -i ${key} ${user}@${host} "$cmd"
-    #echo "======================================="
-}
-
 echo 'Setup ssh key pair on chaos server'
 remote_exec ${PKEY} ${CHAOS_IP} '[ -f ~/.ssh/id_rsa  ] || ssh-keygen -b 2048 -t rsa -f ~/.ssh/id_rsa -q -N ""'
 remote_copy ${PKEY} ${CHAOS_IP} '~/.ssh/id_rsa.pub' './chaos_id_rsa.pub'
-# Uncomment the below line for first time run
-# remote_exec ${PKEY} ${CHAOS_IP} 'cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys'
 
 echo 'Copy self signed docker registry certificates to cluster nodes & master'
 remote_exec ${PKEY} ${CHAOS_IP} "sudo mkdir -p /etc/docker/certs.d/${REGISTRY_DOMAIN_NAME}:${REGISTRY_DOMAIN_PORT}"
@@ -75,5 +41,4 @@ done
 
 echo 'Setup cluster'
 #remote_exec ${PKEY} ${CHAOS_IP} "/bin/bash -c 'cd ~ && source /projects/crown/chaos.env.sh && cd ${K_LOC} && KUBERNETES_PROVIDER=ubuntu ./get-kube.sh'"
-
 
