@@ -42,4 +42,6 @@ RUN pip3 install Jinja2 PyYaml pykube
 
 RUN pip3 install -U six
 
+RUN pip3 install invoke
+
 RUN chown -R go:go /var/go/.kube
