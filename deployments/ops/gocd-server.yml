@@ -13,6 +13,18 @@ spec:
       containers:
       - name: frigate-gocd-server
         image: registry.walkure.net:5000/frigate:latest
+        volumeMounts:
+        - name: config-store
+          mountPath: /etc/go/
+        - name: artifacts-store
+          mountPath: /var/lib/go-server/
         ports:
         - containerPort: 8153
         - containerPort: 8154
+      volumes:
+      - name: config-store
+        persistentVolumeClaim:
+          claimName: gocd-server-config-pvc
+      - name: artifacts-store
+        persistentVolumeClaim:
+          claimName: gocd-server-artifacts-pvc

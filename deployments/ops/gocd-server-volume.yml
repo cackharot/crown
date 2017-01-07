@@ -1,0 +1,49 @@
+kind: PersistentVolume
+apiVersion: v1
+metadata:
+  name: gocd-server-config-pv
+spec:
+  capacity:
+    storage: 100Mi
+  accessModes:
+    - ReadWriteOnce
+  nfs:
+    path: /gocd_server/config/
+    server: 172.16.0.253
+---
+kind: PersistentVolume
+apiVersion: v1
+metadata:
+  name: gocd-server-artifacts-pv
+spec:
+  capacity:
+    storage: 5Gi
+  accessModes:
+    - ReadWriteOnce
+  nfs:
+    path: /gocd_server/artifacts/
+    server: 172.16.0.253
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: gocd-server-config-pvc
+  namespace: chaos-gocd
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 100Mi
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: gocd-server-artifacts-pvc
+  namespace: chaos-gocd
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 5Gi
