@@ -61,7 +61,7 @@ spec:
         - --domain=$DNS_DOMAIN.
         - --dns-port=10053
         - --config-map=kube-dns
-        - --kube-master-url=http://172.16.0.253:8080
+        #- --kube-master-url=http://172.16.0.253:8080
         - --v=2
         env:
         - name: PROMETHEUS_PORT
